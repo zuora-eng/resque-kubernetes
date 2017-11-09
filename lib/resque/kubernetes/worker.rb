@@ -17,15 +17,28 @@ module Resque
           super
         end
 
-        def shutdown?
-          if term_on_empty
-            if queues_empty?
-              log_with_severity :info, "shutdown: queues are empty"
-              shutdown
+        if Gem::Specification::find_all_by_name('resque-pool').any?
+          def shutdown_with_pool?
+            if term_on_empty
+              if queues_empty?
+                log_with_severity :info, "shutdown: queues are empty"
+                shutdown
+              end
             end
-          end
 
-          super
+            super
+          end
+        else
+          def shutdown?
+            if term_on_empty
+              if queues_empty?
+                log_with_severity :info, "shutdown: queues are empty"
+                shutdown
+              end
+            end
+
+            super
+          end
         end
       end
 
