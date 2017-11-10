@@ -90,7 +90,7 @@ module Resque
         add_labels(manifest)
         ensure_term_on_empty(manifest)
         ensure_reset_policy(manifest)
-        update_job_name(manifest)
+        #update_job_name(manifest)
 
         job = Kubeclient::Resource.new(manifest)
         jobs_client.create_job(job)
