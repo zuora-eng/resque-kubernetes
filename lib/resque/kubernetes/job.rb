@@ -79,7 +79,7 @@ module Resque
           begin
             pods_client.delete_pod(pod.metadata.name, pod.metadata.namespace)
           rescue
-            Rails.logger.log("Can't Delete Pod")
+            puts "Cannot Delete Pod"
           end
         end
       end
