@@ -101,7 +101,11 @@ module Resque
         #update_job_name(manifest)
 
         job = Kubeclient::Resource.new(manifest)
-        jobs_client.create_job(job)
+        response = jobs_client.create_job(job)
+        puts "Creating Job"
+        puts "#{response.inspect}"
+        puts "Job Created"
+        return true
       end
 
       def jobs_maxed?(name, namespace)
