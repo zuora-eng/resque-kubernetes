@@ -67,7 +67,11 @@ module Resque
         finished = resque_jobs.select { |job| job.spec.completions == job.status.succeeded }
 
         finished.each do |job|
-          jobs_client.delete_job(job.metadata.name, job.metadata.namespace)
+          begin
+            jobs_client.delete_job(job.metadata.name, job.metadata.namespace)
+          rescue
+            puts "Cannot Delete Job"
+          end
         end
       end
 
