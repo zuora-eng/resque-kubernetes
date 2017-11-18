@@ -5,14 +5,14 @@ module Resque
   module Kubernetes
     module Job
 
-      def before_enqueue_kubernetes_job(*_)
+      def before_enqueue_kubernetes_job(*args)
         if defined? Rails
           return unless Resque::Kubernetes.environments.include?(Rails.env)
         end
 
         reap_finished_jobs
         reap_finished_pods
-        apply_kubernetes_job
+        apply_kubernetes_job(args)
       end
 
       private
@@ -88,9 +88,9 @@ module Resque
         end
       end
 
-      def apply_kubernetes_job
-        puts "Pulling Manifest for #{self.inspect}"
-        manifest = job_manifest.dup
+      def apply_kubernetes_job(args)
+        puts "Pulling Manifest for #{self.inspect} #{args}"
+        manifest = job_manifest(args).dup
         ensure_namespace(manifest)
 
         # Do not start job if we have reached our maximum count
