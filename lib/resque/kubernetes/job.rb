@@ -76,7 +76,11 @@ module Resque
         finished = resque_jobs.select { |pod| pod.status.phase == "Succeeded" }
 
         finished.each do |pod|
-          pods_client.delete_pod(pod.metadata.name, pod.metadata.namespace)
+          begin
+            pods_client.delete_pod(pod.metadata.name, pod.metadata.namespace)
+          rescue
+            Rails.logger.log("Can't Delete Pod")
+          end
         end
       end
 
