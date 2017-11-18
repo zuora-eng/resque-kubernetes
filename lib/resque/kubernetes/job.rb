@@ -89,6 +89,7 @@ module Resque
       end
 
       def apply_kubernetes_job
+        puts "Pulling Manifest for #{self.inspect}"
         manifest = job_manifest.dup
         ensure_namespace(manifest)
 
@@ -101,9 +102,8 @@ module Resque
         #update_job_name(manifest)
 
         job = Kubeclient::Resource.new(manifest)
-        response = jobs_client.create_job(job)
         puts "Creating Job"
-        puts "#{response.inspect}"
+        response = jobs_client.create_job(job)
         puts "Job Created"
         return true
       end
